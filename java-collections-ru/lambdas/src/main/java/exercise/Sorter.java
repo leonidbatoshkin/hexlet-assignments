@@ -10,7 +10,6 @@ class Sorter {
     public static List<String> takeOldestMans(List<Map<String, String>> mansList) {
         return mansList.stream()
                 .filter(gender -> gender.get("gender").equals("male"))
-//                .sorted(Comparator.comparing(birthday -> birthday.get("birthday")))
                 .sorted((birthday1, birthday2) -> {
                     LocalDate date1 = LocalDate.parse(birthday1.get("birthday"));
                     LocalDate date2 = LocalDate.parse(birthday2.get("birthday"));
