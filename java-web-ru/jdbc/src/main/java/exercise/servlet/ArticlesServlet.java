@@ -124,8 +124,8 @@ public class ArticlesServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
-        request.setAttribute("articles", articles);
-        request.setAttribute("articles", getId(request));
+        request.setAttribute("article", article);
+        request.setAttribute("id", getId(request));
         TemplateEngineUtil.render("articles/show.html", request, response);
     }
 }
