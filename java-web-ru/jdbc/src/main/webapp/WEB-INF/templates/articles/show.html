@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{layouts/application.html}">
+
+<head>
+  <title>Show article</title>
+</head>
+<section layout:fragment="content">
+  <table class="table">
+    <thead>
+    <th>Название</th>
+    <th>Тело</th>
+    </thead>
+    <tbody>
+    // Вывод результата в цикле
+    <tr th:each="art : ${article}" th:object="${article}">
+      <td th:text="*{title}"></td>
+      <td>
+      <td th:text="*{body}"></td>
+      </td>
+    </tr>
+  </table>
+</section>
