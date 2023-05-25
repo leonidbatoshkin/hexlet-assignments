@@ -25,6 +25,8 @@ import java.util.Objects;
 
 public class ArticlesServlet extends HttpServlet {
 
+    List<Map<String, String>> articles = new ArrayList<>();
+
     private String getId(HttpServletRequest request) {
         String pathInfo = request.getPathInfo();
         if (pathInfo == null) {
@@ -64,9 +66,9 @@ public class ArticlesServlet extends HttpServlet {
                               HttpServletResponse response)
             throws IOException, ServletException {
 
+
         ServletContext context = request.getServletContext();
         Connection connection = (Connection) context.getAttribute("dbConnection");
-        List<Map<String, String>> articles = new ArrayList<>();
         var page = request.getParameter("page") == null ? 1 : Integer.parseInt(request.getParameter("page"));
         String query = "SELECT id, tittle, body FROM articles LIMIT ? OFFSET ?";
         try {
@@ -122,7 +124,8 @@ public class ArticlesServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
-        request.setAttribute("article", article);
+        request.setAttribute("articles", articles);
+        request.setAttribute("articles", getId(request));
         TemplateEngineUtil.render("articles/show.html", request, response);
     }
 }

@@ -6,18 +6,8 @@ layout:decorate="~{layouts/application.html}">
   <title>Show article</title>
 </head>
 <section layout:fragment="content">
-  <table class="table">
-    <thead>
-    <th>Название</th>
-    <th>Тело</th>
-    </thead>
-    <tbody>
-    // Вывод результата в цикле
-    <tr th:each="art : ${article}" th:object="${article}">
-      <td th:text="*{title}"></td>
-      <td>
-      <td th:text="*{body}"></td>
-      </td>
-    </tr>
-  </table>
+  <tr>
+    <td>${article.get("id")}</td>
+    <td><a href='/articles/show?id=${article.get("id")}'>${article.get("title")} ${article.get("body")}</a></td>
+  </tr>
 </section>
