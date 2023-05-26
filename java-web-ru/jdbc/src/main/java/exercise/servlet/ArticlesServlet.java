@@ -70,13 +70,12 @@ public class ArticlesServlet extends HttpServlet {
         ServletContext context = request.getServletContext();
         Connection connection = (Connection) context.getAttribute("dbConnection");
         var page = request.getParameter("page") == null ? 1 : Integer.parseInt(request.getParameter("page"));
-        String query = "SELECT id, tittle, body FROM articles LIMIT ? OFFSET ?";
+        String query = "SELECT id, title, body FROM articles ORDER BY id ASC LIMIT ? OFFSET ?";
         try {
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, 10);
-            statement.setInt(2, (page - 1) * 10);
+            statement.setInt(1, 11);
+            statement.setInt(2, page == 1 ? 0 : 9);
             ResultSet rs = statement.executeQuery();
-
             while (rs.next()) {
                 articles.add(Map.of(
                                 "id", rs.getString("id"),
@@ -95,21 +94,33 @@ public class ArticlesServlet extends HttpServlet {
         request.setAttribute("page", page);
         request.setAttribute("articles", articles);
         TemplateEngineUtil.render("articles/index.html", request, response);
+        articles.clear();
+    }
+
+
+    private Map<String, String> findArticle(String id) {
+
+        return articles
+                .stream()
+                .filter(u -> u.get("id").equals(id))
+                .findAny()
+                .orElse(null);
     }
 
     private void showArticle(HttpServletRequest request,
                              HttpServletResponse response)
             throws IOException, ServletException {
 
+        Map<String, String> article = new HashMap<>();
+        int id = Integer.parseInt(Objects.requireNonNull(getId(request)));
+
         ServletContext context = request.getServletContext();
         Connection connection = (Connection) context.getAttribute("dbConnection");
-        String query = "SELECT tittle, body FROM articles WHERE id = ?";
-        Map<String, String> article = new HashMap<>();
+        String query = "SELECT id, title, body FROM articles WHERE id = ? ";
         try {
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, Integer.parseInt(Objects.requireNonNull(getId(request))));
+            statement.setInt(1, id);
             ResultSet rs = statement.executeQuery();
-
             while (rs.next()) {
                 article.putAll(Map.of(
                                 "id", rs.getString("id"),
@@ -124,8 +135,13 @@ public class ArticlesServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
-        request.setAttribute("article", article);
-        request.setAttribute("id", getId(request));
+
+        if (article.get("title") == null || article.get("body") == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+        request.setAttribute("title", article.get("title"));
+        request.setAttribute("body", article.get("body"));
         TemplateEngineUtil.render("articles/show.html", request, response);
     }
 }

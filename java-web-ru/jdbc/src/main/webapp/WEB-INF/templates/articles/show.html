@@ -7,7 +7,6 @@ layout:decorate="~{layouts/application.html}">
 </head>
 <section layout:fragment="content">
   <tr>
-    <td>${article.get("id")}</td>
-    <td><a href='/articles/show?id=${article.get("id")}'>${article.get("title")} ${article.get("body")}</a></td>
-  </tr>
+    <td th:text="${title}"></td>
+    <td th:text="${body}"></td>
 </section>

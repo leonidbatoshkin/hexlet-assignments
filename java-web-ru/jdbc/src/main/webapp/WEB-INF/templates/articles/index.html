@@ -22,10 +22,10 @@
   <nav>
     <ul class="pagination justify-content-center">
       <li class="page-item">
-        <a class="page-link" th:href="@{/articles(page=${${page} - 1})}">Prev</a>
+        <a class="page-link" th:href="@{/articles(page=${page - 1})}">Prev</a>
       </li>
       <li class="page-item">
-        <a class="page-link" th:href="@{/articles(page=${${page} + 1})}">Next</a>
+        <a class="page-link" th:href="@{/articles(page=${page + 1})}">Next</a>
       </li>
     </ul>
   </nav>
