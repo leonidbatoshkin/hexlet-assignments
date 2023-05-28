@@ -11,8 +11,7 @@ layout:decorate="~{layouts/application.html}">
     <ul class="list-group list-group-flush">
       <li class="list-group-item" th:text="*{title}"></li>
       <li class="list-group-item" th:text="*{body}"></li>
-      <li class="list-group-item" th:text="*{category}"></li>
-
+      <li class="list-group-item" th:text="${article.getCategory().getName()}"></li>
     </ul>
   </div>
 </section>
