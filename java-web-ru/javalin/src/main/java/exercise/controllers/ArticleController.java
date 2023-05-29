@@ -93,7 +93,7 @@ public final class ArticleController {
                 .asUpdate() // Преобразует запрос в UPDATE
                 .set("title", title) // Устанавливаем новое значение поля
                 .set("body", body) // Устанавливаем новое значение поля
-                .set("category_id", categoryId) // Устанавливаем новое значение поля
+                .set("category", categoryId) // Устанавливаем новое значение поля
                 .update(); // Выполняем обновление
         ctx.sessionAttribute("flash", "Статья успешно обновлена");
         ctx.redirect("/articles");
