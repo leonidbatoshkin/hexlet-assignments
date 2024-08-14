@@ -48,7 +48,7 @@ public class ProductsController {
         var maybeProduct = productRepository.findByTitleAndPrice(data.getTitle(), data.getPrice());
 
         if(maybeProduct.isPresent())
-            throw new ResourceAlreadyExistsException("Product with id " + data.getId() + " already exists");
+            throw new ResourceAlreadyExistsException("Product already exists");
 
         productRepository.save(data);
         return data;
