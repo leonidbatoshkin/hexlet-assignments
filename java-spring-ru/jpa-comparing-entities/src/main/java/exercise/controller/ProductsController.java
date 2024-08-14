@@ -32,22 +32,12 @@ public class ProductsController {
         return productRepository.findAll();
     }
 
-    /*@PostMapping(path = "")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Product create(@RequestBody Product data) {
-        productRepository.findProductByTitleAndPrice(data.getTitle(), data.getPrice())
-                .orElseThrow(() ->
-                new ResourceAlreadyExistsException("Product with id " + data.getId() + " already exists"));
-        productRepository.save(data);
-        return data;
-    }*/
-
     @PostMapping(path = "")
     @ResponseStatus(HttpStatus.CREATED)
     public Product create(@RequestBody Product data) {
-        var maybeProduct = productRepository.findByTitleAndPrice(data.getTitle(), data.getPrice());
+        var product = productRepository.findByTitleAndPrice(data.getTitle(), data.getPrice());
 
-        if(maybeProduct.isPresent())
+        if(product.isPresent())
             throw new ResourceAlreadyExistsException("Product already exists");
 
         productRepository.save(data);
