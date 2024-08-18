@@ -9,7 +9,7 @@ import exercise.daytime.Daytime;
 import exercise.daytime.Day;
 import exercise.daytime.Night;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Scope;
+import org.springframework.web.context.annotation.RequestScope;
 
 @SpringBootApplication
 public class Application {
@@ -19,20 +19,9 @@ public class Application {
     }
 
     @Bean
-    public Daytime daytime() {
+    @RequestScope
+    public Daytime getDayTime() {
         var hour = LocalDateTime.now().getHour();
-        return hour >= 6 && hour < 22 ? getDayTime() : getNightTime();
-    }
-
-    @Bean
-    @Scope("prototype")
-    public Day getDayTime() {
-        return new Day();
-    }
-
-    @Bean
-    @Scope("prototype")
-    public Night getNightTime() {
-        return new Night();
+        return hour >= 6 && hour < 22 ? new Day() : new Night();
     }
 }

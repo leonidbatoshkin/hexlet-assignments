@@ -10,6 +10,6 @@ public class Day implements Daytime {
 
     @PostConstruct
     public void init() {
-        System.out.println("Day bean is initialized!");
+        System.out.println("\nBean Day is initialized!\n");
     }
 }
