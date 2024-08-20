@@ -88,21 +88,20 @@ class ApplicationTest {
 
     @Test
     public void testUpdate() throws Exception {
-        var data = new HashMap<>();
-        data.put("title", "title1");
-        data.put("description", "description1");
 
-        var request = put("/tasks/" + testTask.getId())
+        var data = new HashMap<>();
+        data.put("title", "new title");
+
+        var request = put("/tasks/{id}", testTask.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                // ObjectMapper конвертирует Map в JSON
                 .content(om.writeValueAsString(data));
 
         mockMvc.perform(request)
                 .andExpect(status().isOk());
 
-        testTask = taskRepository.findById(testTask.getId()).get();
-        assertThat(testTask.getTitle()).isEqualTo(("title1"));
-        assertThat(testTask.getDescription()).isEqualTo(("description1"));
+        var task = taskRepository.findById(testTask.getId()).get();
+
+        assertThat(task.getTitle()).isEqualTo(data.get("title"));
     }
 
     @Test
@@ -117,14 +116,23 @@ class ApplicationTest {
 
         mockMvc.perform(request)
                 .andExpect(status().isCreated());
+
+        var task = taskRepository.findByTitle(title).get();
+        assertThat(task).isNotNull();
+        assertThat(task.getTitle()).isEqualTo(title);
+        assertThat(task.getDescription()).isEqualTo(description);
     }
 
     @Test
     public void testDelete() throws Exception {
 
-        mockMvc.perform(delete("/tasks/{id}", testTask.getId()))
+        var request = delete("/tasks/{id}", testTask.getId());
+
+        mockMvc.perform(request)
                 .andExpect(status().isOk());
 
+        var task = taskRepository.findById(testTask.getId()).orElse(null);
+        assertThat(task).isNull();
         assertThat(taskRepository.findAll()).isEmpty();
     }
 }
